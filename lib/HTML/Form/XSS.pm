@@ -6,17 +6,36 @@ package HTML::Form::XSS;
 
 HTML::Form::XSS - Test HTML forms for cross site scripting vulnerabilities.
 
-=head1 Author
+=head1 SYNOPSIS
 
-MacGyveR <dumb@cpan.org>
+	use HTML::Form::XSS;
+	use WWW::Mechanize;
+	my $mech = WWW::Mechanize->new();
+	my $checker = HTML::Form::XSS->new($mech, config => '../root/config.xml');
+	$mech->get("http://www.site.com/pagewithform.html");
+	my @forms = $mech->forms();
+	foreach my $form (@forms){
+		my @results = $checker->do_audit($form);
+		foreach my $result (@results){
+			if($result->vulnerable()){
+				my $example = $result->example();
+				print "Example of vulnerable URL: $example\n";
+				last;
+			}
+		}
+	}
 
-Development questions, bug reports, and patches are welcome to the above address
+=head1 DESCRIPTION
 
-=head1 Copyright
+Provides a simple way to test HTML forms for cross site scripting (XSS)
+vulnerabilities.
 
-Copyright (c) 2009 MacGyveR. All rights reserved.
+Checks to perform are given in a XML config file with the results of each
+test returned.
 
-This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
+=head1 METHODS
+
+=over 4
 
 =cut
 
@@ -27,17 +46,44 @@ use XML::Simple;
 use Carp;
 use HTML::Form::XSS::Result;
 use base qw(HTML::XSSLint);	#we use this module as a base
-our $VERSION = 0.1;
+our $VERSION = 0.2;
+###################################
+
+=pod
+
+=item new()
+
+	my $mech = WWW::Mechanize->new();
+	my $checker = HTML::Form::XSS->new($mech, config => '../root/config.xml');
+
+Creates a new HTML::Form::XSS object using two required parameters. Firstly a 
+<WWW::Mechanize> or compatible object, secondly the path to the XML config file.
+
+Please see the example config.xml included in this distribution for details.
+
+=cut
+
 ###################################
 sub new{
 	my($class, $mech, %params) = @_;
-	my $self = {
-		'_mech' => $mech,
-		'_configFile' => $params{'config'}
-	};
-	bless $self, $class;
-	$self->_loadConfig();
-	return $self;
+	if($mech){	#we need this someday
+		if(defined($params{'config'})){	#how can we setup without this
+			my $self = {
+				'_mech' => $mech,
+				'_configFile' => $params{'config'}
+			};
+			bless $self, $class;
+			$self->_loadConfig();
+			return $self;
+		}
+		else{
+			confess("No Config file option given");
+		}
+	}
+	else{
+		confess("No WWW::Mechanize compatible object given");
+	}
+	return undef;
 }
 ###################################
 sub make_params {	#passing a check value here, so we can do many checks
@@ -51,6 +97,22 @@ sub make_params {	#passing a check value here, so we can do many checks
     }
     return \%params;
 }
+###################################
+
+=pod
+
+=item do_audit()
+
+	my @results = $checker->do_audit($form);
+
+Using the provided <HTML::Form> object the form is tested for all the
+XSS attacks in the XML config file.
+
+An array of <HTML::Form::XSS::Result> objects are returned, one for
+each check.
+
+=cut
+
 #######################################################
 sub do_audit {	#we do many checks here not just one
     my($self, $form) = @_;
@@ -63,7 +125,7 @@ sub do_audit {	#we do many checks here not just one
 	    print " " . $response->code();
 	    $response->is_success or confess("Can't fetch " . $form->action);	
 	    my @names = $self->compare($response->content, $params);
-    	my $result = DT::XSSLint::Result->new(	#using are modified result class
+    	my $result = HTML::Form::XSS::Result->new(	#using are modified result class
 			form => $form,
 			names => \@names,
 			check => $check
@@ -74,7 +136,7 @@ sub do_audit {	#we do many checks here not just one
     return @results;
 }
 ###################################
-sub compare{	#we need tp make the patterns regex safe
+sub compare{	#we need to make the patterns regex safe
     my($self, $html, $params) = @_;
     my @names;
     foreach my $param (keys(%{$params})){
@@ -85,6 +147,10 @@ sub compare{	#we need tp make the patterns regex safe
     }
     return @names;
 }
+###################################
+#
+#private methods
+#
 ###################################
 sub _getChecks{
 	my $self = shift;
@@ -122,4 +188,30 @@ sub _getMech{
 	return $self->{'_mech'};
 }
 ###################################
+
+=pod
+
+=back
+
+=head1 SEE ALSO
+
+L<WWW::Mechanize|WWW::Mechanize>,
+L<HTML::Form|HTML::Form>,
+L<HTML::XSSLint|HTML::XSSLint>
+
+=head1 AUTHOR
+
+MacGyveR <dumb@cpan.org>
+
+Development questions, bug reports, and patches are welcome to the above address
+
+=head1 COPYRIGHT
+
+Copyright (c) 2009 MacGyveR. All rights reserved.
+
+This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
+
+=cut
+
+####################################################
 return 1;

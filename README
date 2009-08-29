@@ -5,7 +5,7 @@ cd script
 
 TODO
 -----
-Use javascript for better XSS detection.
+Use javascript for better XSS detection with Mozilla::Mechanize.
 Don't run all tests before giving results, bail out at first success.
 
 CREDITS

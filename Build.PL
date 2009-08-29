@@ -8,6 +8,8 @@ my $build = Module::Build->new(
 	requires => {
 		"Carp" => "",
 		"Data::Dumper" => "",
+		"XML::Simple" => "",
+		"HTML::XSSLint::Result" => ""
 	},
 	build_requires => {
 		"Test::More" => "",

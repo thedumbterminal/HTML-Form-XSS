@@ -1,5 +1,6 @@
 rm MANIFEST
 perl Build.PL
+./Build
 ./Build manifest
 ./Build test
 ./Build dist
