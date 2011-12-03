@@ -1,3 +1,8 @@
+HTML::Form::XSS 0.3 -- 03/12/2011
+
+	Updated POD
+	Added more debugging to unit test
+
 HTML::Form::XSS 0.2 -- 19/08/2009
 
 	More POD

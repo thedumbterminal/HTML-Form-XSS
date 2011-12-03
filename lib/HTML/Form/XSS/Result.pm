@@ -21,8 +21,6 @@ all of its functions.
 
 =head1 METHODS
 
-=over 4
-
 =cut
 
 use strict;
@@ -32,7 +30,7 @@ use base qw(HTML::XSSLint::Result);
 
 =pod
 
-=item example();
+=head2 example();
 
 	my $exampleUrl $result->example();
 
@@ -62,8 +60,6 @@ sub _getCheck{	#accessor
 
 =pod
 
-=back
-
 =head1 AUTHOR
 
 MacGyveR <dumb@cpan.org>
@@ -72,7 +68,7 @@ Development questions, bug reports, and patches are welcome to the above address
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009 MacGyveR. All rights reserved.
+Copyright (c) 2011 MacGyveR. All rights reserved.
 
 This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 
