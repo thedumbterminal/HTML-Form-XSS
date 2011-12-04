@@ -6,15 +6,15 @@ my $build = Module::Build->new(
 	license => 'perl',
 	dist_author => 'MacGyveR <dumb@cpan.org>',
 	requires => {
-		"Carp" => "",
-		"Data::Dumper" => "",
-		"XML::Simple" => "",
-		"HTML::XSSLint::Result" => ""
+		"Carp" => 0,
+		"Data::Dumper" => 0,
+		"XML::Simple" => 0,
+		"HTML::XSSLint::Result" => 0
 	},
 	build_requires => {
-		"Test::More" => "",
-		"WWW::Mechanize" => "",
-		"HTML::Form" => ""
+		"Test::More" => 0,
+		"WWW::Mechanize" => 0,
+		"HTML::Form" => 0
 	},
 	create_makefile_pl => 'traditional'
 );
