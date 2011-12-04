@@ -35,6 +35,8 @@ test returned.
 
 =head1 METHODS
 
+=cut
+
 use strict;
 use warnings;
 use Data::Dumper;
@@ -168,7 +170,8 @@ sub _getConfig{
 sub _loadConfig{
 	my $self = shift;
 	my $file = $self->_getConfigFile();
-	my $ref = XMLin($file);
+	my $simple = XML::Simple->new();
+	my $ref = $simple->XMLin($file);
 	$self->{'_config'} = $ref;
 	return 1;
 }

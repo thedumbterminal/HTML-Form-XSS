@@ -2,6 +2,7 @@ use strict;
 use warnings;
 use Test::More;
 use WWW::Mechanize;
+use lib qw(lib ../lib);
 use HTML::Form::XSS;
 plan(tests => 1);
 

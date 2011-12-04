@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib qw(../lib);
+use lib qw(lib ../lib);
 use HTML::Form::XSS;
 use WWW::Mechanize;
 use Data::Dumper;
