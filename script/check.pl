@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/bin/env perl
 use strict;
 use warnings;
 use lib qw(lib ../lib);
@@ -6,7 +6,8 @@ use HTML::Form::XSS;
 use WWW::Mechanize;
 use Data::Dumper;
 if(scalar(@ARGV) != 1){	#check command line args
-	die("Usage: $0 <URL with form>\n");
+	print "Usage: $0 <URL with form>\n";
+	exit(1);
 }
 my $url = $ARGV[0];
 my $mech = WWW::Mechanize->new();
