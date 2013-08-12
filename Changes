@@ -1,3 +1,7 @@
+HTML::Form::XSS 0.31 -- 12/08/2013
+
+	Fix bug in unit test
+
 HTML::Form::XSS 0.3 -- 03/12/2011
 
 	Updated POD

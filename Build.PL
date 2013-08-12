@@ -16,6 +16,9 @@ my $build = Module::Build->new(
 		"WWW::Mechanize" => 0,
 		"HTML::Form" => 0
 	},
+	configure_requires => {
+		'Module::Build' => 0
+	},
 	create_makefile_pl => 'traditional'
 );
 $build->create_build_script;

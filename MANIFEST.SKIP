@@ -41,3 +41,4 @@
 how_to_release.txt
 .project
 ^MYMETA.yml$
+^MYMETA\.json$
