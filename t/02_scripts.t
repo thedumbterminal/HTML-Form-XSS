@@ -3,9 +3,8 @@ use warnings;
 use Test::More;
 use lib qw(lib ../lib);
 plan(tests => 1);
-chdir("script");
 my $ok = 0;
-if(open(TEST, "./check.pl 2>&1 |")){
+if(open(TEST, "script/check.pl 2>&1 |")){
 	while(my $line = <TEST>){
 		print $line;	#so we can see problems if any
 		if($line =~ m/Usage/){
