@@ -1,3 +1,7 @@
+HTML::Form::XSS 0.32 -- 26/08/2013
+
+	Still Fixing bug in unit test
+
 HTML::Form::XSS 0.31 -- 12/08/2013
 
 	Fix bug in unit test

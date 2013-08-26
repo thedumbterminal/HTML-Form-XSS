@@ -2,9 +2,10 @@ use strict;
 use warnings;
 use Test::More;
 use lib qw(lib ../lib);
+use FindBin qw($Bin);
 plan(tests => 1);
 my $ok = 0;
-if(open(TEST, "script/check.pl 2>&1 |")){
+if(open(TEST, "$Bin/../script/check.pl 2>&1 |")){
 	while(my $line = <TEST>){
 		print $line;	#so we can see problems if any
 		if($line =~ m/Usage/){
