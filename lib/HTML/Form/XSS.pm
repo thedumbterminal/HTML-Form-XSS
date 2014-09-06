@@ -44,7 +44,7 @@ use XML::Simple;
 use Carp;
 use HTML::Form::XSS::Result;
 use base qw(HTML::XSSLint);	#we use this module as a base
-our $VERSION = 0.33;
+our $VERSION = 0.34;
 ###################################
 
 =pod
