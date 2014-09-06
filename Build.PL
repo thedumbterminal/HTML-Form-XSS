@@ -19,6 +19,12 @@ my $build = Module::Build->new(
 	configure_requires => {
 		'Module::Build' => 0
 	},
-	create_makefile_pl => 'traditional'
+	create_makefile_pl => 'traditional',
+	meta_merge => {
+		resources => {
+			repository => 'https://github.com/thedumbterminal/HTML-Form-XSS'
+		}
+	}
+	
 );
 $build->create_build_script;
