@@ -39,12 +39,11 @@ test returned.
 
 use strict;
 use warnings;
-use Data::Dumper;
 use XML::Simple;
-use Carp;
 use HTML::Form::XSS::Result;
-use base qw(HTML::XSSLint);	#we use this module as a base
-our $VERSION = 0.34;
+use parent qw(HTML::XSSLint);	#we use this module as a base
+our $VERSION = 1.00;
+my $BROWSER = 'Mozilla/5.0 (compatible, MSIE 11, Windows NT 6.3; Trident/7.0;  rv:11.0) like Gecko';	#emulate MS IE
 ###################################
 
 =pod
@@ -75,25 +74,25 @@ sub new{
 			return $self;
 		}
 		else{
-			confess("No Config file option given");
+			die("No Config file option given");
 		}
 	}
 	else{
-		confess("No WWW::Mechanize compatible object given");
+		die("No WWW::Mechanize compatible object given");
 	}
 	return undef;
 }
 ###################################
 sub make_params {	#passing a check value here, so we can do many checks
-    my($self, $check, @inputs) = @_;
-    my %params;
-    foreach my $input (@inputs){
-    	if(defined($input->name()) && length($input->name())){
-	    	my $value = $self->random_string();
-	    	$params{$input->name()} = $check . $value;    		
-    	}
-    }
-    return \%params;
+	my($self, $check, @inputs) = @_;
+	my %params;
+	foreach my $input (@inputs){
+		if(defined($input->name()) && length($input->name())){
+			my $value = $self->random_string();
+			$params{$input->name()} = $check . $value;    		
+		}
+	}
+	return \%params;
 }
 ###################################
 
@@ -113,37 +112,38 @@ each check.
 
 #######################################################
 sub do_audit {	#we do many checks here not just one
-    my($self, $form) = @_;
-    my @results;
-   	print "Checking...";
-    foreach my $check ($self->_getChecks()){
-	    my $params = $self->make_params($check, $form->inputs);
-	    my $request = $self->fillin_and_click($form, $params);
-	    my $response = $self->request($request);
-	    print " " . $response->code();
-	    $response->is_success or confess("Can't fetch " . $form->action);	
-	    my @names = $self->compare($response->content, $params);
-    	my $result = HTML::Form::XSS::Result->new(	#using are modified result class
+	my($self, $form) = @_;
+	my @results;
+	print "Checking...\n";
+	foreach my $check ($self->_getChecks()){
+		my $params = $self->make_params($check, $form->inputs);
+		my $request = $self->fillin_and_click($form, $params);
+		$request->header('User-Agent' => $BROWSER);
+		my $response = $self->request($request);
+		print "Status: " . $response->code() . "\n";
+		$response->is_success or die("Can't fetch " . $form->action);	
+		my @names = $self->compare($response->content, $params);
+		my $result = HTML::Form::XSS::Result->new(	#using are modified result class
 			form => $form,
 			names => \@names,
 			check => $check
-    	);
-    	push(@results, $result);
-    }
-    print "\n";
-    return @results;
+		);
+		push(@results, $result);
+	}
+	print "\n";
+	return @results;
 }
 ###################################
 sub compare{	#we need to make the patterns regex safe
-    my($self, $html, $params) = @_;
-    my @names;
-    foreach my $param (keys(%{$params})){
-    	my $pattern = $self->_makeRegexpSafe($params->{$param});
-    	if($html =~ m/$pattern/){
-    		push(@names, $param);
-    	}
-    }
-    return @names;
+	my($self, $html, $params) = @_;
+	my @names;
+	foreach my $param (keys(%{$params})){
+		my $pattern = $self->_makeRegexpSafe($params->{$param});
+		if($html =~ m/$pattern/){
+			push(@names, $param);
+		}
+	}
+	return @names;
 }
 ###################################
 #
@@ -204,7 +204,7 @@ Development questions, bug reports, and patches are welcome to the above address
 
 =head1 COPYRIGHT
 
-Copyright (c) 2009 MacGyveR. All rights reserved.
+Copyright (c) 2016 MacGyveR. All rights reserved.
 
 This library is free software; you can redistribute it and/or modify it under the same terms as Perl itself.
 

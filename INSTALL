@@ -4,6 +4,7 @@ You install this, as you would install any perl module
 library, by running these commands:
 
    perl Build.PL
-   make
-   make test
-   make install
+   ./Build installdeps
+   ./Build
+   ./Build test
+   ./Build install

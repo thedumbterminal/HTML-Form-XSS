@@ -6,6 +6,7 @@ my $build = Module::Build->new(
 	license => 'perl',
 	dist_author => 'MacGyveR <dumb@cpan.org>',
 	requires => {
+		'perl' => '5.10.1',
 		"Carp" => 0,
 		"Data::Dumper" => 0,
 		"XML::Simple" => 0,

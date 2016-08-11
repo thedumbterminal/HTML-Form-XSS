@@ -25,7 +25,7 @@ all of its functions.
 
 use strict;
 use warnings;
-use base qw(HTML::XSSLint::Result);
+use parent qw(HTML::XSSLint::Result);
 ###############################################
 
 =pod
