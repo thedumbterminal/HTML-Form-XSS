@@ -1,4 +1,7 @@
-rm MANIFEST
+#!/bin/bash
+set -e
+
+rm -f MANIFEST
 perl Build.PL
 ./Build
 ./Build manifest
